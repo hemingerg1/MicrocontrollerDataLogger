@@ -1,0 +1,4 @@
+numpy
+spicy
+pyserial
+matplotlib
