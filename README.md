@@ -9,7 +9,7 @@ I wrote my own version of the microcontroller software, which is in the "PIO" di
 
 
 Python UI:
-<p align="center"><img src="images/UI_screenshot.png"></p>
+<p align="center"><img src="Images/UI_screenshot.png"></p>
 
 
 
