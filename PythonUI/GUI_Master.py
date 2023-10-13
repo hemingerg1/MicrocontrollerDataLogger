@@ -129,21 +129,15 @@ class ComGui():
         '''
         self.clicked_bd = StringVar()
         bds = ["-",
-               "300",
-               "600",
-               "1200",
-               "2400",
                "4800",
                "9600",
-               "14400",
                "19200",
-               "28800",
+               "14400",
                "38400",
-               "56000",
                "57600",
-               "115200",
-               "128000",
-               "256000"]
+               "115200"]
+               #"128000",
+               #"256000"]
         self.clicked_bd .set(bds[0])
         self.drop_baud = OptionMenu(
             self.frame, self.clicked_bd, *bds, command=self.connect_ctrl)
@@ -192,8 +186,8 @@ class ComGui():
                 self.btn_refresh["state"] = "disable"
                 self.drop_baud["state"] = "disable"
                 self.drop_com["state"] = "disable"
-                InfoMsg = f"Successful UART connection using {self.clicked_com.get()}"
-                messagebox.showinfo("showinfo", InfoMsg)
+                #InfoMsg = f"Successful UART connection using {self.clicked_com.get()}"
+                #messagebox.showinfo("showinfo", InfoMsg)
 
                 # Display the channel manager
                 self.conn = ConnGUI(self.root, self.serial, self.data)

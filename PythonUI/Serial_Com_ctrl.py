@@ -98,7 +98,7 @@ class SerialCtrl():
                 gui.conn.sync_status["fg"] = "orange"
                 gui.data.RowMsg = self.ser.readline()
                 # print(f"RowMsg: {gui.data.RowMsg}")
-                gui.data.DecodeMsg()
+                gui.data.DecodeSyncMsg()
                 if gui.data.sync_ok in gui.data.msg[0]:
                     if int(gui.data.msg[1]) > 0:
                         gui.conn.btn_start_stream["state"] = "active"
@@ -138,7 +138,7 @@ class SerialCtrl():
             try:
                 self.ser.write(gui.data.StartStream.encode())
                 gui.data.RowMsg = self.ser.readline()
-                gui.data.DecodeMsg()
+                gui.data.DecodeDataMsg()
                 gui.data.StreamDataCheck()
                 if gui.data.StreamData:
                     gui.data.SetRefTime()
@@ -149,16 +149,12 @@ class SerialCtrl():
         while self.threading:
             try:
                 gui.data.RowMsg = self.ser.readline()
-                gui.data.DecodeMsg()
+                gui.data.DecodeDataMsg()
                 gui.data.StreamDataCheck()
                 if gui.data.StreamData:
                     gui.data.UpdataXdata()
                     gui.data.UpdataYdata()
-                    # Ysam = [Ys[len(gui.data.XData)-1] for Ys in gui.data.YData]
                     gui.data.AdjustData()
-                    # print(
-                    #     f"X Len: {len(gui.data.XData)}, Xstart:{gui.data.XData[0]}  Xend : {gui.data.XData[len(gui.data.XData)-1]}, Xrange: {gui.data.XData[len(gui.data.XData)-1] - gui.data.XData[0]} Ydata len: {len(gui.data.YData[0])} Yval: : {Ysam} ")
-
                     if gui.save:
                         t1 = threading.Thread(
                             target=gui.data.SaveData, args=(gui,), daemon=True)

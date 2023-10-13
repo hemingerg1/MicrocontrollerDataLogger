@@ -65,21 +65,28 @@ class DataMaster():
                 data_writer = csv.writer(f)
                 data_writer.writerow(data)
 
-    def DecodeMsg(self):
+    def DecodeSyncMsg(self):
         temp = self.RowMsg.decode('utf8')
         if len(temp) > 0:
             if "#" in temp:
                 self.msg = temp.split("#")
                 del self.msg[0]
-                if self.msg[0] in "D":
-                    self.messageLen = 0
-                    self.messageLenCheck = 0
-                    del self.msg[0]
-                    del self.msg[len(self.msg)-1]
-                    self.messageLen = int(self.msg[len(self.msg)-1])
-                    del self.msg[len(self.msg)-1]
-                    for item in self.msg:
-                        self.messageLenCheck += len(item)
+
+
+    def DecodeDataMsg(self):
+        temp = self.RowMsg.decode('utf8')
+        if len(temp) > 0:
+            self.msg = temp.split(",")
+            #del self.msg[0]
+            #if self.msg[0] in "D":
+            #self.messageLen = 0
+            #self.messageLenCheck = 0
+            del self.msg[len(self.msg)-1]  # deletes the \n
+            #self.messageLen = int(self.msg[len(self.msg)-1])  # gets the length of the message from the last number
+            #del self.msg[len(self.msg)-1] # deletes the message length from the data
+            #for item in self.msg:
+                #self.messageLenCheck += len(item)  # gets the total length of the data
+            print(self.msg)  ########### DEBUG
 
     def GenChannels(self):
         self.Channels = [f"Ch{ch}" for ch in range(self.SynchChannel)]
@@ -99,12 +106,9 @@ class DataMaster():
         self.IntMsg = [int(msg) for msg in self.msg]
 
     def StreamDataCheck(self):
-        self.StreamData = False
-        if self.SynchChannel == len(self.msg):
-            if self.messageLen == self.messageLenCheck:
-                self.StreamData = True
-                self.IntMsgFunc()
-
+        self.StreamData = True
+        self.IntMsgFunc()
+              
     def SetRefTime(self):
         if len(self.XData) == 0:
             self.RefTime = time.perf_counter()

@@ -3,7 +3,7 @@
 
 Adafruit_ADS1115 ads;
 
-char numSensors = 2;
+int numSensors = 2;
 int sensorSlopes[] = {625, 625};
 float sensorOffsets[] = {-312.5, -312.5};
 
@@ -48,7 +48,7 @@ void serialEvent()
     char inChar = Serial.read();
     if (inChar == '?')
     {
-      Serial.print('#!#');
+      Serial.print("#!#");
       Serial.print(numSensors);
       Serial.println('#');
       stream = 0;
