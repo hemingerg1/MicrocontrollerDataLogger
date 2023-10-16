@@ -1,15 +1,13 @@
 # MicrocontrollerDataLogger
-This project is a python based application that will plot and record live streaming data from a microcontroller.  
+This project is a python-based application that will plot and record live streaming data from a microcontroller.  
   
-The python UI code was adapted from [Weew Stack's project](https://github.com/weewStack/Python-projects/tree/master/004-PySerial%20-%20MCU%20-%20Multi-Datareadings), and changed to allow the data to be sent from the microcontoller in CSV format. WeeW Stack has a very useful and extensive [Youtube video series](https://www.youtube.com/playlist?list=PLtVUYRe-Z-meHdTlzqCHGPjZvnL2VZVn8) explaining his code, I highly encourage you to watch it.
+The python UI code was adapted from [Weew Stack's project](https://github.com/weewStack/Python-projects/tree/master/004-PySerial%20-%20MCU%20-%20Multi-Datareadings), and changed to allow the data to be sent from the microcontroller in CSV format. WeeW Stack has a very useful and extensive [Youtube video series](https://www.youtube.com/playlist?list=PLtVUYRe-Z-meHdTlzqCHGPjZvnL2VZVn8) explaining his code, I highly encourage you to watch it.
   
-I wrote my own version of the microcontroller software, which is in the "PIO" directory (this directory is a Platformio project). The main code is [here](PIO/DataLogger/src/main.cpp), you can easly adapt the main loop() to collect any sensor readings you need, and print them to the serial moninator in CSV format.
-  
-
+I wrote my own version of the microcontroller software, which is in the "PIO" directory (this directory is a Platformio project). The main code is [here](PIO/DataLogger/src/main.cpp), you can easily adapt the main loop() to collect any sensor readings you need, and print them to the serial monitor in CSV format.
 
 
 Python UI:
-<p align="center"><img src="images/UI_screenshot.png"></p>
+<p align="center"><img src="Images/UI_screenshot.png"></p>
 
 
 
