@@ -3,8 +3,8 @@
 #include <Adafruit_ADS1X15.h>
 
 Adafruit_ADS1115 ads;
-#define I2C_SDA 40 // define SCA pin number
-#define I2C_SCL 38 // define SCL pin number
+#define I2C_SDA 2 // define SCA pin number
+#define I2C_SCL 1 // define SCL pin number
 // Connect ADDR pin to GND for address of 0x48
 TwoWire I2C = TwoWire(0); // create a I2C bus called 'I2C'
 
@@ -16,6 +16,8 @@ String data = "";
 int dataSum;
 char stream = 0;
 void serialRead();
+char cal = 0;
+void calibrate();
 
 void setup()
 {
@@ -29,16 +31,12 @@ void setup()
   // ads.setGain(GAIN_ONE);        // 1x gain   +/- 4.096V  1 bit = 2mV      0.125mV
   // ads.setGain(GAIN_TWO);        // 2x gain   +/- 2.048V  1 bit = 1mV      0.0625mV
 
-  ads.begin(0x48, &I2C);
-
-  /*
   if (!ads.begin(0x48, &I2C))
   {
     Serial.println("Failed to initialize ADS.");
     while (1)
       ;
   }
-  */
 
   pinMode(15, OUTPUT);
 }
@@ -51,9 +49,9 @@ void loop()
     dataSum = 0;
     for (int i = 0; i < numSensors; i++)
     {
-      // int16_t adc = ads.readADC_SingleEnded(i);
-      // float v = (adc * 0.1875) / 1000;
-      int p = 3 + i; //(sensorSlopes[i] * v) + sensorOffsets[i];
+      int adc = ads.readADC_SingleEnded(i);
+      float v = (adc * 0.1875) / 1000;
+      int p = (sensorSlopes[i] * v) + sensorOffsets[i];
 
       data += p;
       data += ',';
@@ -64,13 +62,18 @@ void loop()
     data += ',';
     Serial.println(data);
     data = "";
+    delay(1);
   }
   else
   {
     digitalWrite(15, LOW); // turn LED off
   }
 
-  delay(1);
+  if (cal)
+  {
+    calibrate();
+    delay(1000);
+  }
 
   if (Serial.available())
   {
@@ -93,10 +96,48 @@ void serialRead()
     if (inChar == 'A')
     {
       stream = 1;
+      cal = 0;
     }
     if (inChar == 'S')
     {
       stream = 0;
     }
+    if (inChar == 'C')
+    {
+      cal = 1;
+      stream = 0;
+    }
+    if (inChar == 'V')
+    {
+      cal = 0;
+    }
+  }
+}
+
+void calibrate()
+{
+  Serial.println("---------------------------------------------------------");
+  for (int i = 0; i < numSensors; i++)
+  {
+    float adcsum = 0;
+    float vsum = 0;
+    float psum = 0;
+
+    for (int j = 0; j < 10; j++)
+    {
+      int adc = ads.readADC_SingleEnded(i);
+      float v = (adc * 0.1875) / 1000;
+      int p = (sensorSlopes[i] * v) + sensorOffsets[i];
+
+      adcsum += adc;
+      vsum += v;
+      psum += p;
+      delay(10);
+    }
+    Serial.printf("Sensor %d:\n", i);
+    Serial.printf("ADC = %.1f |", adcsum / 10);
+    Serial.printf(" V =  %.3f |", vsum / 10);
+    Serial.printf(" P = %.0f\n", psum / 10);
+    Serial.println();
   }
 }

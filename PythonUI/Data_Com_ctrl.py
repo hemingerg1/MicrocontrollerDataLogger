@@ -30,8 +30,8 @@ class DataMaster():
             "DigitalFilter": self.DigitalFilter
         }
 
-        self.DisplayTimeRange = 5
-
+        #self.DisplayTimeRange = 5
+        
         self.ChannelNum = {
             'Ch0': 0,
             'Ch1': 1,
@@ -84,7 +84,7 @@ class DataMaster():
             del self.msg[len(self.msg)-1] # deletes the sum from the data
             for item in self.msg:
                 self.messageLenCheck += int(item)  # adds all the data together
-            print(self.msg)  ########### DEBUG
+            #print(self.msg)  ########### DEBUG
 
     def GenChannels(self):
         self.Channels = [f"Ch{ch}" for ch in range(self.SynchChannel)]
@@ -114,7 +114,7 @@ class DataMaster():
         if len(self.XData) == 0:
             self.RefTime = time.perf_counter()
         else:
-            self.RefTime = time.perf_counter() - self.XData[len(self.XData)-1]
+            self.RefTime = time.perf_counter() - self.XData[-1]
 
     def UpdataXdata(self):
         if len(self.XData) == 0:
@@ -126,9 +126,8 @@ class DataMaster():
         for ChNumber in range(self.SynchChannel):
             self.YData[ChNumber].append(self.IntMsg[ChNumber])
 
-    def AdjustData(self):
-        lenXdata = len(self.XData)
-        if (self.XData[lenXdata-1] - self.XData[0]) > self.DisplayTimeRange:
+    def AdjustData(self, gui):
+        if (self.XData[-1] - self.XData[0]) > gui.selChartTime.get():
             del self.XData[0]
             for ydata in self.YData:
                 del ydata[0]

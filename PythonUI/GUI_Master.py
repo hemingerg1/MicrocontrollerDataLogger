@@ -270,6 +270,8 @@ class ConnGUI():
 
         self.separator = ttk.Separator(self.frame, orient='vertical')
 
+        self.ChartTime()
+
         # Optional Graphic parameters
         self.padx = 20
         self.pady = 15
@@ -298,7 +300,8 @@ class ConnGUI():
         self.btn_add_chart.grid(column=4, row=1, padx=self.padx)
         self.btn_kill_chart.grid(column=5, row=1, padx=self.padx)
 
-        self.save_check.grid(column=4, row=2, columnspan=2)
+        self.save_check.grid(column=4, row=2) #, columnspan=2)
+        self.drop_time.grid(column=5, row=2)
         self.separator.place(relx=0.58, rely=0, relwidth=0.001, relheight=1)
 
     def ConnGUIClose(self):
@@ -382,6 +385,20 @@ class ConnGUI():
             self.save = False
         else:
             self.save = True
+
+    def ChartTime(self):
+        self.selChartTime = IntVar()
+        time = ["2",
+               "5",
+               "10",
+               "20",
+               "30",
+               "45",
+               "60"]
+        self.selChartTime.set(time[1])
+        self.drop_time = OptionMenu(
+            self.frame, self.selChartTime, *time)
+        self.drop_time.config(width=3)
 
 
 class DisGUI():

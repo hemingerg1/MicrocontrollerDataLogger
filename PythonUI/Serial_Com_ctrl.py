@@ -154,7 +154,7 @@ class SerialCtrl():
                 if gui.data.StreamData:
                     gui.data.UpdataXdata()
                     gui.data.UpdataYdata()
-                    gui.data.AdjustData()
+                    gui.data.AdjustData(gui)
                     if gui.save:
                         t1 = threading.Thread(
                             target=gui.data.SaveData, args=(gui,), daemon=True)
