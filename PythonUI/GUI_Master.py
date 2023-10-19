@@ -316,10 +316,13 @@ class ConnGUI():
         Method to close the connection GUI and destorys the widgets
         '''
         # Must destroy all the element so they are not kept in Memory
-        for widget in self.frame.winfo_children():
+        for widget in self.frameCon.winfo_children():
             widget.destroy()
-        self.frame.destroy()
-        self.root.geometry("360x120")
+        for widget in self.frameChart.winfo_children():
+            widget.destroy()
+        self.frameCon.destroy()
+        self.frameChart.destroy()
+        self.root.geometry("340x120")
 
     def start_stream(self):
         self.btn_start_stream["state"] = "disabled"

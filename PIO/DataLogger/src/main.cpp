@@ -9,8 +9,8 @@ Adafruit_ADS1115 ads;
 TwoWire I2C = TwoWire(0); // create a I2C bus called 'I2C'
 
 int numSensors = 2;
-int sensorSlopes[] = {625, 625};
-float sensorOffsets[] = {-312.5, -312.5};
+float sensorSlopes[] = {618.6, 619.6};
+float sensorOffsets[] = {-284.1, -302.4};
 
 String data = "";
 int dataSum;
@@ -72,7 +72,7 @@ void loop()
   if (cal)
   {
     calibrate();
-    delay(1000);
+    delay(5000);
   }
 
   if (Serial.available())
@@ -123,7 +123,7 @@ void calibrate()
     float vsum = 0;
     float psum = 0;
 
-    for (int j = 0; j < 10; j++)
+    for (int j = 0; j < 20; j++)
     {
       int adc = ads.readADC_SingleEnded(i);
       float v = (adc * 0.1875) / 1000;
@@ -132,12 +132,12 @@ void calibrate()
       adcsum += adc;
       vsum += v;
       psum += p;
-      delay(10);
+      delay(20);
     }
     Serial.printf("Sensor %d:\n", i);
-    Serial.printf("ADC = %.1f |", adcsum / 10);
-    Serial.printf(" V =  %.3f |", vsum / 10);
-    Serial.printf(" P = %.0f\n", psum / 10);
+    Serial.printf("ADC = %.1f |", adcsum / 20);
+    Serial.printf(" V =  %.3f |", vsum / 20);
+    Serial.printf(" P = %.0f\n", psum / 20);
     Serial.println();
   }
 }
