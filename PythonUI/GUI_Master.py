@@ -42,7 +42,7 @@ class RootGUI():
         '''Initializing the root GUI and other comps of the program'''
         self.root = Tk()
         self.root.title("Serial communication")
-        self.root.geometry("360x120")
+        self.root.geometry("340x120")
         self.root.config(bg="white")
         self.serial = serial
         self.data = data
@@ -68,7 +68,7 @@ class ComGui():
         self.root = root
         self.serial = serial
         self.data = data
-        self.frame = LabelFrame(root, text="Com Manager",
+        self.frame = LabelFrame(root, text="Communication Manager",
                                 padx=5, pady=5, bg="white")
         self.label_com = Label(
             self.frame, text="Available Port(s): ", bg="white", width=15, anchor="w")
@@ -86,7 +86,7 @@ class ComGui():
                                   width=10, state="disabled",  command=self.serial_connect)
 
         # Optional Graphic parameters
-        self.padx = 20
+        self.padx = 10
         self.pady = 5
 
         # Put on the grid all the elements
@@ -102,7 +102,7 @@ class ComGui():
         self.label_bd.grid(column=1, row=3)
 
         self.drop_baud.grid(column=2, row=3, padx=self.padx, pady=self.pady)
-        self.drop_com.grid(column=2, row=2, padx=self.padx)
+        self.drop_com.grid(column=2, row=2, padx=self.padx, pady=self.pady)
 
         self.btn_refresh.grid(column=3, row=2)
         self.btn_connect.grid(column=3, row=3)
@@ -237,44 +237,47 @@ class ConnGUI():
         self.save = False
 
         # Build ConnGui Static Elements
-        self.frame = LabelFrame(root, text="Connection Manager",
-                                padx=5, pady=5, bg="white", width=60)
+        self.frameCon = LabelFrame(root, text="Connection Manager",
+                                padx=5, pady=5, bg="white")
+        self.frameChart = LabelFrame(root, text="Chart Manager",
+                                padx=5, pady=5, bg="white")
         self.sync_label = Label(
-            self.frame, text="Sync Status: ", bg="white", width=15, anchor="w")
+            self.frameCon, text="Sync Status: ", bg="white", width=15, anchor="w")
         self.sync_status = Label(
-            self.frame, text="..Sync..", bg="white", fg="orange", width=5)
+            self.frameCon, text="..Sync..", bg="white", fg="orange", width=5)
 
         self.ch_label = Label(
-            self.frame, text="Active channels: ", bg="white", width=15, anchor="w")
+            self.frameCon, text="Active channels: ", bg="white", width=15, anchor="w")
         self.ch_status = Label(
-            self.frame, text="...", bg="white", fg="orange", width=5)
+            self.frameCon, text="...", bg="white", fg="orange", width=5)
 
-        self.btn_start_stream = Button(self.frame, text="Start", state="disabled",
+        self.btn_start_stream = Button(self.frameCon, text="Start", state="disabled",
                                        width=5, command=self.start_stream)
 
-        self.btn_stop_stream = Button(self.frame, text="Stop", state="disabled",
+        self.btn_stop_stream = Button(self.frameCon, text="Stop", state="disabled",
                                       width=5, command=self.stop_stream)
 
-        self.btn_add_chart = Button(self.frame, text="+", state="disabled",
+        self.btn_add_chart = Button(self.frameChart, text="+", state="disabled",
                                     width=5, bg="white", fg="#098577",
                                     command=self.new_chart)
 
-        self.btn_kill_chart = Button(self.frame, text="-", state="disabled",
+        self.btn_kill_chart = Button(self.frameChart, text="-", state="disabled",
                                      width=5, bg="white", fg="#CC252C",
                                      command=self.kill_chart)
         self.save = False
         self.SaveVar = IntVar()
-        self.save_check = Checkbutton(self.frame, text="Save data", variable=self.SaveVar,
+        self.save_check = Checkbutton(self.frameChart, text="Save data", variable=self.SaveVar,
                                       onvalue=1, offvalue=0, bg="white", state="disabled",
                                       command=self.save_data)
 
-        self.separator = ttk.Separator(self.frame, orient='vertical')
-
+        #self.separator = ttk.Separator(self.frame, orient='vertical')
+        self.time_label = Label(
+            self.frameChart, text="Chart Display Time (s): ", bg="white", anchor="w")
         self.ChartTime()
 
         # Optional Graphic parameters
-        self.padx = 20
-        self.pady = 15
+        self.padx = 10
+        self.pady = 5
 
         # Extending the GUI
         self.ConnGUIOpen()
@@ -284,25 +287,29 @@ class ConnGUI():
         '''
         Method to display all the widgets
         '''
-        self.root.geometry("800x120")
-        self.frame.grid(row=0, column=4, rowspan=3,
-                        columnspan=5, padx=5, pady=5)
+        self.root.geometry("820x120")
+        self.frameCon.grid(row=0, column=4, rowspan=3,
+                        columnspan=3, padx=5, pady=5)
+        
 
         self.sync_label.grid(column=1, row=1)
         self.sync_status.grid(column=2, row=1)
 
         self.ch_label.grid(column=1, row=2)
-        self.ch_status.grid(column=2, row=2, pady=self.pady)
+        self.ch_status.grid(column=2, row=2)
 
-        self.btn_start_stream.grid(column=3, row=1, padx=self.padx)
-        self.btn_stop_stream.grid(column=3, row=2, padx=self.padx)
+        self.btn_start_stream.grid(column=3, row=1, padx=self.padx, pady=self.pady)
+        self.btn_stop_stream.grid(column=3, row=2, padx=self.padx, pady=self.pady)
 
-        self.btn_add_chart.grid(column=4, row=1, padx=self.padx)
-        self.btn_kill_chart.grid(column=5, row=1, padx=self.padx)
+        self.frameChart.grid(row=0, column=7, rowspan=3,
+                        columnspan=3, padx=5, pady=5)
 
-        self.save_check.grid(column=4, row=2) #, columnspan=2)
-        self.drop_time.grid(column=5, row=2)
-        self.separator.place(relx=0.58, rely=0, relwidth=0.001, relheight=1)
+        self.btn_add_chart.grid(column=1, row=1, padx=self.padx, pady=self.pady)
+        self.btn_kill_chart.grid(column=2, row=1, padx=self.padx)
+
+        self.save_check.grid(column=3, row=1)
+        self.time_label.grid(column=1, row=2, columnspan=2)
+        self.drop_time.grid(column=3, row=2, pady=self.pady)
 
     def ConnGUIClose(self):
         '''
@@ -397,7 +404,7 @@ class ConnGUI():
                "60"]
         self.selChartTime.set(time[1])
         self.drop_time = OptionMenu(
-            self.frame, self.selChartTime, *time)
+            self.frameChart, self.selChartTime, *time)
         self.drop_time.config(width=3)
 
 
@@ -446,13 +453,13 @@ class DisGUI():
     def AdjustRootFrame(self):
         self.totalframes = len(self.frames)-1
         if self.totalframes > 0:
-            RootW = 800*2
+            RootW = 820*2
         else:
-            RootW = 800
+            RootW = 820
         if self.totalframes+1 == 0:
             RootH = 120
         else:
-            RootH = 120 + 430 * (int(self.totalframes/2)+1)
+            RootH = 125 + 430 * (int(self.totalframes/2)+1)
         self.root.geometry(f"{RootW}x{RootH}")
 
     def AddGraph(self):
@@ -544,7 +551,7 @@ class DisGUI():
             self.OptionVar[ChannelFrameNumber])-1].set(bds[0])
         drop_ch = OptionMenu(Frame, self.FunVar[ChannelFrameNumber][len(
             self.OptionVar[ChannelFrameNumber])-1], *bds)
-        drop_ch.config(width=5)
+        drop_ch.config(width=10)
         drop_ch.grid(row=0, column=2, padx=1)
 
     def DeleteChannel(self, ChannelFrame):

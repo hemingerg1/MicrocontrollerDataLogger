@@ -127,7 +127,7 @@ class DataMaster():
             self.YData[ChNumber].append(self.IntMsg[ChNumber])
 
     def AdjustData(self, gui):
-        if (self.XData[-1] - self.XData[0]) > gui.selChartTime.get():
+        while (self.XData[-1] - self.XData[0]) > gui.selChartTime.get():
             del self.XData[0]
             for ydata in self.YData:
                 del ydata[0]
