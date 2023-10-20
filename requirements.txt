@@ -1,0 +1,6 @@
+numpy
+spicy
+pyserial
+matplotlib
+pandas
+plotly
