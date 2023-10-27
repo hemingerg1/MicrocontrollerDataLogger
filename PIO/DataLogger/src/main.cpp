@@ -14,6 +14,7 @@ float sensorOffsets[] = {-284.1, -302.4};
 
 String data = "";
 int dataSum;
+unsigned long t;
 char stream = 0;
 void serialRead();
 char cal = 0;
@@ -50,10 +51,14 @@ void loop()
     for (int i = 0; i < numSensors; i++)
     {
       int adc = ads.readADC_SingleEnded(i);
+      t = millis();
       float v = (adc * 0.1875) / 1000;
       int p = (sensorSlopes[i] * v) + sensorOffsets[i];
 
-      data += p;
+      data += 'T';
+      data += t;
+      data += ',';
+      data += String(p);
       data += ',';
       dataSum += p;
     };
@@ -62,7 +67,6 @@ void loop()
     data += ',';
     Serial.println(data);
     data = "";
-    delay(1);
   }
   else
   {
@@ -89,7 +93,7 @@ void serialRead()
     if (inChar == '?')
     {
       Serial.print("#!#");
-      Serial.print(numSensors);
+      Serial.print(numSensors * 2);
       Serial.println('#');
       stream = 0;
     }

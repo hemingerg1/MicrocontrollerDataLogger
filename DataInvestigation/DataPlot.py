@@ -13,12 +13,17 @@ def open_csv_file():
     # Check if a file was selected
     if file_path:
         # Read the CSV file into a pandas DataFrame
-        df = pd.read_csv(file_path, names=['Time', 'Sensor0', 'Sensor1']) #index_col=0,
+        df = pd.read_csv(file_path, names=['Time', 'Sensor0Time', 'Sensor0Data', 'Sensor1Time', 'Sensor1Data']) #index_col=0,
+        df = df.drop(columns=['Time'])
+        startTime = df.Sensor0Time.min()
+        df['Sensor0Time'] = df['Sensor0Time'] - startTime
+        df['Sensor1Time'] = df['Sensor1Time'] - startTime
+        #print(df)
         
         # Create a subplot with a single trace
         fig = go.Figure()
-        fig.add_trace(go.Scatter(x=df.index, y=df['Sensor0'], mode='lines+markers', name='Sensor0', line_shape='linear', hoverinfo='none'))
-        fig.add_trace(go.Scatter(x=df.index, y=df['Sensor1'], mode='lines+markers', name='Sensor1', line_shape='linear', hoverinfo='none'))
+        fig.add_trace(go.Scatter(x=df['Sensor0Time'], y=df['Sensor0Data'], mode='lines+markers', name='Sensor0', line_shape='linear', hoverinfo='none'))
+        fig.add_trace(go.Scatter(x=df['Sensor1Time'], y=df['Sensor1Data'], mode='lines+markers', name='Sensor1', line_shape='linear', hoverinfo='none'))
         
         # Configure the layout
         fig.update_layout(title=dict(text=filename, xanchor='center', x=0.5),

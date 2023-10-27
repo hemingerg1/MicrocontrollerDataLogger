@@ -77,13 +77,18 @@ class DataMaster():
         temp = self.RowMsg.decode('utf8')
         if len(temp) > 0:
             self.msg = temp.split(",")
-            del self.msg[len(self.msg)-1]  # deletes the \n
+            del self.msg[-1]  # deletes the \n
             self.messageLen = 0
             self.messageLenCheck = 0
-            self.messageLen = int(self.msg[len(self.msg)-1])  # gets the sum of the data from the last number
+            self.messageLen = int(self.msg[-1])  # gets the sum of the data from the last number
             del self.msg[len(self.msg)-1] # deletes the sum from the data
-            for item in self.msg:
-                self.messageLenCheck += int(item)  # adds all the data together
+            for i in range(len(self.msg)):
+                item = self.msg[i]
+                if 'T' in str(item):  # if timestamp data
+                    t = item.split('T')
+                    self.msg[i] = int(t[1])/1000 # removes the 'T' and converts to seconds from milliseconds
+                else:
+                    self.messageLenCheck += int(item)  # adds all the data together
             #print(self.msg)  ########### DEBUG
 
     def GenChannels(self):
@@ -101,7 +106,7 @@ class DataMaster():
         self.XData = []
 
     def IntMsgFunc(self):
-        self.IntMsg = [int(msg) for msg in self.msg]
+        self.IntMsg = [float(msg) for msg in self.msg]
 
     def StreamDataCheck(self):
         self.StreamData = False
