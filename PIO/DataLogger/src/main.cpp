@@ -9,8 +9,8 @@ Adafruit_ADS1115 ads;
 TwoWire I2C = TwoWire(0); // create a I2C bus called 'I2C'
 
 int numSensors = 2;
-float sensorSlopes[] = {618.6, 619.6};
-float sensorOffsets[] = {-284.1, -302.4};
+float sensorSlopes[] = {619.21, 619.62};
+float sensorOffsets[] = {-294.43, -307.07};
 
 String data = "";
 int dataSum;
